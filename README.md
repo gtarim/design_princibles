@@ -6,3 +6,5 @@ The repo consist with some of type design principles usage in C++
 
 
 ## References
+* https://platis.solutions/blog/2020/06/22/how-to-write-solid-cpp/
+* https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design
