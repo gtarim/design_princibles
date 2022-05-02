@@ -2,19 +2,25 @@
 #include <vector>
 #include <memory>
 
+struct Item 
+{
+    int id;
+    Item(int _id) : id{_id} { }
+};
+
 namespace before
 {
-class ProcessManager
+class Order
 {
-    std::vector<int> pids;
+    std::vector<Item> items;
 public:
-    void add(int pid) { pids.push_back(pid); }
-    void run() 
+    void add(const Item& item) { items.push_back(item); }
+    void pay() 
     {
-        while(pids.size())
+        while(items.size())
         {
-            std::cout << pids.back() << "\n";
-            pids.pop_back(); 
+            std::cout << items.back().id << "\n";
+            items.pop_back(); 
         }
     }
 };
@@ -24,22 +30,19 @@ public:
 
 namespace after
 {
-struct Process
+struct Order
 {
-    std::vector<int> pids;
-    void add(int pid){ pids.push_back(pid); }
+    std::vector<Item> items;    
+    void add(const Item& item) { items.push_back(item); }
 };
-class ProcessManager
+struct PaymentSystem
 {
-    std::shared_ptr<Process> process;
-public:
-    ProcessManager(std::shared_ptr<Process> process) : process{process} { }
-    void run()
+    void pay(Order& order)
     {
-        while(process->pids.size())
+        while(order.items.size())
         {
-            std::cout << process->pids.back() << "\n";
-            process->pids.pop_back();
+            std::cout << order.items.back().id << "\n";
+            order.items.pop_back();
         }
     }
 };
@@ -47,20 +50,23 @@ public:
 
 int main()
 {
-    std::cout << "before:\n";
-    before::ProcessManager mgr;
-    mgr.add(10);
-    mgr.add(20);
-    mgr.add(30);
-    mgr.run();
+    {
+        std::cout << "before:\n";
+        before::Order order;
+        order.add(Item{10});
+        order.add(Item{20});
+        order.add(Item{30});
+        order.pay();
+    }
 
     ///////////////
-
-    std::cout << "after:\n";
-    auto process = std::make_shared<after::Process>();
-    process->add(10);
-    process->add(20);
-    process->add(30);
-    after::ProcessManager mgrAfter{process};
-    mgrAfter.run();
+    {
+        std::cout << "after:\n";
+        after::Order order;
+        order.add(Item{10});
+        order.add(Item{20});
+        order.add(Item{30});
+        after::PaymentSystem payment;
+        payment.pay(order);
+    }
 }
