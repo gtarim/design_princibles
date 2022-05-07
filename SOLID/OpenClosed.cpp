@@ -16,15 +16,34 @@ struct Order
 
 namespace before
 {
-struct PaymentSystem
+class PaymentSystem
+{
+    int balance;
+public:
+    PaymentSystem (int _balance) : balance{_balance}; 
+    virtual void getBalance() { return }
+    virtual void pay(Order& order) = 0;
+};
+struct PaymentCash : public PaymentSystem
 {
     void pay(Order& order)
     {
         while(order.items.size())
         {
-            std::cout << order.items.back().id << "\n";
+            std::cout << "cash=" << order.items.back().id << "\n";
             order.items.pop_back();
-        }
+        } 
+    }
+};
+struct PaymentCredit : public PaymentSystem
+{
+    void pay(Order& order)
+    {
+        while(order.items.size())
+        {
+            std::cout << "credit=" << order.items.back().id << "\n";
+            order.items.pop_back();
+        } 
     }
 };
 };
