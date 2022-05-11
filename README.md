@@ -3,7 +3,11 @@
 The repo consist with some of type design principles usage in C++
 
 ## Implemented Principles
-
+* SOLID
+    Single Responsibility
+    Open/Closed
+    Liskov Substitution
+    
 
 ## References
 * https://platis.solutions/blog/2020/06/22/how-to-write-solid-cpp/
