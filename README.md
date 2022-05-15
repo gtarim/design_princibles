@@ -7,6 +7,7 @@ The repo consist with some of type design principles usage in C++
 * Single Responsibility
 * Open/Close
 * Liskov Substitution
+* Interface Segregation
     
 
 ## References
