@@ -16,19 +16,8 @@ struct Order
 
 namespace before
 {
-class PaymentSystem
+struct PaymentCash
 {
-    int balance;
-public:
-    PaymentSystem (int _balance) : balance{_balance} { } 
-    virtual int getBalance() {return balance;}
-    virtual void pay(Order& order) = 0;
-};
-struct PaymentCash : public PaymentSystem
-{
-    int balance;
-    PaymentCash (int _balance) : PaymentSystem{_balance}, balance{_balance} { } 
-    virtual int getBalance() {return balance;} // !!!
     void pay(Order& order)
     {
         while(order.items.size())
@@ -38,7 +27,7 @@ struct PaymentCash : public PaymentSystem
         } 
     }
 };
-struct PaymentCredit : public PaymentSystem
+struct PaymentCredit
 {
     void pay(Order& order)
     {
@@ -59,14 +48,14 @@ class PaymentSystem
     int balance;
 public:
     PaymentSystem (int _balance) : balance{_balance} { } 
-    virtual int getBalance() {return balance;}
+    virtual int getBalance() const = 0;
     virtual void pay(Order& order) = 0;
 };
 struct PaymentCash : public PaymentSystem
 {
     int balance;
     PaymentCash (int _balance) : PaymentSystem{_balance}, balance{_balance} { } 
-    virtual int getBalance() {return balance;} // !!!
+    int getBalance() const override {return balance;}
     void pay(Order& order)
     {
         while(order.items.size())
@@ -80,7 +69,7 @@ struct PaymentCredit : public PaymentSystem
 {
     int balance;
     PaymentCredit (int _balance) : PaymentSystem{_balance}, balance{_balance} { } 
-    virtual int getBalance() {return balance;} // !!!
+    int getBalance() const override {return balance;}
     void pay(Order& order)
     {
         while(order.items.size())
@@ -100,9 +89,8 @@ int main()
         order.add(Item{10});
         order.add(Item{20});
         order.add(Item{30});
-        before::PaymentCash payment{100};
+        before::PaymentCash payment;
         payment.pay(order);
-        std::cout << payment.getBalance() << "\n";
     }
 
     {
